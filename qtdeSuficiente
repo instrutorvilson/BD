@@ -1,0 +1,16 @@
+create or replace function qtdeSuficiente(idproduto int)
+returns float as
+$BODY$
+   declare qtde float;
+   begin
+     select qtde_estoque into qtde
+	 from produto
+	 where id = $1;
+	 return qtde;
+   end;
+$BODY$
+language 'plpgsql'
+
+
+select qtdeSuficiente(1);
+select * from produto
