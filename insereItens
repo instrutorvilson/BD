@@ -1,0 +1,23 @@
+drop function insereItens(int, int, float, float);
+create function insereItens(idproduto int, idvenda int, qtde float, preco float)
+returns text as
+$BODY$
+   declare qtdeDisponivel float;
+   declare msg text;
+   begin
+     select qtdeSuficiente(idproduto) into qtdeDisponivel;
+	 if (qtdeDisponivel >= qtde) then
+	    insert into itens(idproduto,idvenda,quantidade,precounitario)
+		values($1,$2,$3,$4);
+	    msg = 'Registro inserido com sucesso ';	
+     else
+	    msg = 'Não existe estoque suficiente para este item';
+	 end if;
+	 return msg;
+   end;
+$BODY$
+language 'plpgsql';
+
+select insereItens(3,1,20,5);
+
+select * from itens;
