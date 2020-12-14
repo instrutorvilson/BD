@@ -1,0 +1,18 @@
+drop function geraSubtotal(float,float);
+
+create or replace function geraSubtotal(idProduto int)
+returns float as
+$body$
+   declare resultado float;
+   begin
+     select (preco * qtde_estoque) into resultado
+	 from produto
+	 where id = $1;
+     return  resultado; 
+   end;
+$body$
+language 'plpgsql';
+
+select  p.id, p.descricao, p.preco, p.qtde_estoque,
+geraSubtotal(p.id)
+from produto p
